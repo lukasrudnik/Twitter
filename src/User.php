@@ -50,7 +50,7 @@ class User{
     }
     
     
-    // Funkcja haszująca hasło
+    // Funkcja haszująca hasło + salt
     public function setHashedPassword($setNewScretPassword){ 
         if(is_string($setNewScretPassword) && strlen(trim($setNewScretPassword)) >= 5){
             $newHashedPassword = password_hash($setNewScretPassword, PASSWORD_BCRYPT, $optionsHash);
@@ -214,10 +214,8 @@ class User{
         return true; 
         // Jeżeli obiektu nie było wcześniej w bazie danych to możemy od razu zwrócić true
     }
-        
-        
-        
-        
+    
+    
 }
 
 ?>
