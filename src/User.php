@@ -87,7 +87,7 @@ class User{
                         hashedPassword = '{$this->hashedPassword}'
                     WHERE id = '{$this->id}'";
             
-            if($connection->query(sql)){
+            if($connection->query($sql)){
                 return true;
             }
             else{       

@@ -70,7 +70,7 @@ class Tweet{
                         creationDate = '{$this->creationDate}'
                     WHERE id = '{$this->id}'";
             
-            if($connection->query(sql)){
+            if($connection->query($sql)){
                 return true;
             }
             else{       
@@ -103,7 +103,7 @@ class Tweet{
     
     
     static public function loadTweetByUserId(mysqli $connection, $userId){
-        $sql = "SELECT * FROM Tweet WHERE userId =$userId" .
+        $sql = "SELECT * FROM Tweet WHERE userId = $userId" .
             $connection->mysqli_real_escape_string($userId);
         
         $tweets = [];
