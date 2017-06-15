@@ -97,7 +97,6 @@ class User{
     }
   
     
-    
     // Wczytywanie obiektu z bazy danych po ID
     static public function loadUserById(mysqli $connection, $id) {
         // Funkcja jest statyczna – możemy jej używać na klasie a nie na obiekcie
@@ -124,30 +123,12 @@ class User{
     }
     
     
-    
-    // Wczytywanie obiektu z bazy danych po LOGIN
-    static public function login(mysqli $connection, $email, $password){
-        
-        // Łączenie się po poprawnosci emaila i hasła
-        $loadedUser = self::loadUserByEmail($connection, $email);
-        // jeżeli chce odwołać się do statycznego pola klasy to wtedy używamy self::pole.
-        if($loadedUser && password_verify($password, $loadedUser->hashedPassword)){
-            // password_verify - sprawdza, czy hasło pasuje do hash
-            return $loadedUser;
-        } 
-        else {
-            return false;
-        }
-    }
-    
-    
-    
     // Wczytywanie WSZYSTKICH obiektów z bazy danych
     static public function loadAllUsers(mysqli $connection){
         
         $sql = "SELECT * FROM Users";
         
-        $ret = [] ;
+        $ret = [];
         // Tworzenie pustej tablicy którą potem wypełnimy obiektami wczytanymi z bazy danych
         
         $result = $connection->query($sql);    
@@ -165,10 +146,12 @@ class User{
                 $ret[] = $loadedUser;
                 /*Po stworzeniu i wypełnieniu obiektu danymi wkładamy go do tablicy którą pod koniec zwracamy*/
             }
+            return $ret;
         }
-        return $ret;
+        else{
+            return null;
+        }     
     }
-    
     
     
     // Wczytywanie obiektu oo jego EMAIL
@@ -195,13 +178,29 @@ class User{
     }
     
     
+    // Wczytywanie obiektu z bazy danych po LOGIN
+    static public function login(mysqli $connection, $email, $password){
+        
+        // Łączenie się po poprawnosci emaila i hasła
+        $loadedUser = self::loadUserByEmail($connection, $email);
+        // jeżeli chce odwołać się do statycznego pola klasy to wtedy używamy self::pole.
+        if($loadedUser && password_verify($password, $loadedUser->hashedPassword)){
+            // password_verify - sprawdza, czy hasło pasuje do hash
+            return $loadedUser;
+        } 
+        else {
+            return false;
+        }
+    }
+     
     
     // Usunięcie obiektu 
     public function delete(mysqli $connection){
         if($this->id != -1){
-            $sql = "DELETE FROM Users WHERE id = $this->id";
+            $sql = "DELETE FROM Users WHERE id = '{$this->id}'";
             
             $result = $connection->query($sql);
+            
             if($result == true){
                 $this->id = -1; 
                 // Jako, że usnęliśmy obiekt to zmieniamy jego id na -1
