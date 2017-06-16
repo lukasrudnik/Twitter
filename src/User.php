@@ -1,13 +1,11 @@
 <?php
 
-$optionsHash = ['cost'=>11];
-
 class User{
     
     private $id;
     private $username;
     private $email;
-    private $hashedPassword;
+    private $passwordToHash;
     
     // Konstruktor bez żadnych atrybutów aby nastawiał wszystkie atrybuty na domyślne wartości
     public function __construct(){
@@ -15,7 +13,7 @@ class User{
         // id ma -1 bo ten obiekt nie jest połączony z żadnym rzędem w bazie danych    
         $this->username = '';
         $this->email = '';
-        $this->$hashedPassword = '';
+        $this->passwordToHash = '';
     }
   
     
@@ -39,22 +37,25 @@ class User{
     }
     
     public function setEmail($email){
-        if(is_string($email) && strlen(trim($email)) >= 5){
+        if(is_string($email) && strlen(trim($email)) >= 6){
             $this->email = trim($email);
         }
-        return $this->emial;
+        return $this->email;
     }
     
     public function getEmail(){
-        return $this->emial;
+        return $this->email;
     }
     
     
+    
     // Funkcja haszująca hasło + salt
-    public function setHashedPassword($setNewScretPassword){ 
-        if(is_string($setNewScretPassword) && strlen(trim($setNewScretPassword)) >= 5){
-            $newHashedPassword = password_hash($setNewScretPassword, PASSWORD_BCRYPT, $optionsHash);
-            $this->hashedPassword = $newHashedPassword;
+    public function setPassword($newPassword){ 
+        $optionSalt = ['cost'=>11];
+        
+        if(is_string($newPassword) && strlen(trim($newPassword)) >= 6){
+            $newHashedPassword = password_hash($newPassword, PASSWORD_BCRYPT, $optionSalt);
+            $this->passwordToHash = $newHashedPassword;
         }
     }
     
@@ -66,7 +67,7 @@ class User{
         if($this->id == -1){
                    
             $sql = "INSERT INTO Users (username, email, hashedPassword)
-                    VALUES('{$this->username}', '{$this->email}', '{$this->hashedPassword}')";
+                    VALUES('{$this->username}', '{$this->email}', '{$this->passwordToHash}')";
             
             $result = $connection->query($sql);
             
@@ -81,13 +82,12 @@ class User{
         }    
         // Jeżeli id NIE jest równe -1 to robimy jego aktualizację
         else{
-            $sql = "UPDATE Users
-                    SET name = '{$this->username}',
-                        email = '{$this->email}',
-                        hashedPassword = '{$this->hashedPassword}'
+            $sql = "UPDATE Users SET username = '{$this->username}',
+                                     email = '{$this->email}',
+                                     hashedPassword = '{$this->passwordToHash}'
                     WHERE id = '{$this->id}'";
             
-            if($connection->query($sql)){
+            if($connection->query($sql)){            
                 return true;
             }
             else{       
@@ -112,7 +112,7 @@ class User{
             $loadedUser->id = $row['id'];
             $loadedUser->username = $row['username'];
             $loadedUser->email = $row['email'];
-            $loadedUser->hashedPassword = $row['hashedPassword'];
+            $loadedUser->passwordToHash = $row['hashedPassword'];
             /*Tworzenie nowego obiektu użytkownika i nastawienie mu odpowiednich parametrów, 
             jesteśmy w środku klasy, więc mamy dostęp do własności prywatnych mimo działania w metodzie statycznej*/         
             return $loadedUser;     
@@ -139,7 +139,7 @@ class User{
                 $loadedUser->id = $row['id'];
                 $loadedUser->username = $row['username']; 
                 $loadedUser->email = $row['email'];
-                $loadedUser->hashedPassword = $row['hashedPassword'];             
+                $loadedUser->passwordToHash = $row['hashedPassword'];             
                 /*Tworzymy nowy obiekt użytkownika i nastawiamy mu odpowiednie parametry. 
                 Jako że jesteśmy w środku klasy mamy dostęp do własności prywatnych, 
                 mimo działania w metodzie statycznej*/            
@@ -168,7 +168,7 @@ class User{
             $loadedUser->id = $row['id'];
             $loadedUser->username = $row['username'];
             $loadedUser->email = $row['email'];
-            $loadedUser->hashedPassword = $row['hashedPassword'];
+            $loadedUser->passwordToHash = $row['hashedPassword'];
             
             return $loadedUser;
         }
