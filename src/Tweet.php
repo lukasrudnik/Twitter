@@ -42,7 +42,7 @@ class Tweet{
     }
     
     public function getCreationDate(){
-        return $this->creationDate
+        return $this->creationDate;
     }
     
     

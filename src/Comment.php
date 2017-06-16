@@ -90,6 +90,7 @@
     }
      
      
+     // ... Funkcję loadCommentById
      static public function loadCommentByUserId(mysqli $connection, $idUsera){
         $sql = "SELECT * FROM Comment WHERE idUsera = " .
             $connection->mysqli_real_escape_string($idUsera) . "ORDER BY creationDate DESC";
@@ -118,6 +119,7 @@
     }
      
      
+     // ...  Funkcję loadAllCommentsByPostId
      static public function loadCommentByTweetId(mysqli $connection, $idPostu){
         $sql = "SELECT * FROM Comment WHERE idPostu = $idPostu" .
             $connection->mysqli_real_escape_string($idPostu);
@@ -146,6 +148,25 @@
     }
      
      
- }
+    public function delete(mysqli $connection){
+        if($this->id != -1){
+            $sql = "DELETE FROM Tweet WHERE id = '{$this->id}'";
+            
+            $result = $connection->query($sql);
+            
+            if($result == true){
+                $this->id = -1; 
+     
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        return true;       
+    }
+     
+     
+}
 
 ?>

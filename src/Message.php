@@ -68,8 +68,8 @@ class Message{
         if($this->id == -1){
             
             $sql = "INSERT INTO Message (idSendera, idRecivera, message, messageRead, creationDate)
-            VALUES('{$this->idSendera}', '{$this->idRecivera}', '{$this->message}',
-            '{$this->messageRead}', '{$this->creationDate}')";
+                    VALUES('{$this->idSendera}', '{$this->idRecivera}', '{$this->message}',
+                    '{$this->messageRead}', '{$this->creationDate}')";
             
             $result = $connection->query($sql);
             
@@ -128,13 +128,16 @@ class Message{
         } 
     }
     
-    // aktualizacja nieprzeczytanych wiadomośći 
+    /* Aktualizacja nieprzeczytanych wiadomośći: W tabeli stwórz pole trzymające informację, 
+    czy wiadomość została przeczytana np.: 1–wiadomośćprzeczytana, lub, 0–wiadomośćnieprzeczytana) */
     static public function updateMessageRead(mysqli $connection, $messageId){
-        $sql = "SELECT * FROM Message WHERE id ='" . $connection->real_escape_string($messageId) . "'";
+        $sql = "SELECT * FROM Message WHERE id ='" . 
+                $connection->mysqli_real_escape_string($messageId) . "'";
         
         $result = $connection->query($sql);
         if($result){
             $updateQuery = "UPDATE Message SET MessageRead = '1' WHERE id = '$messageId'";
+            // '1' - bo wiadomosc nie jest przeczytana
        
             if($result = $connection->query($updateQuery)) {             
                 return true;
@@ -146,7 +149,113 @@ class Message{
         return false;
     }
     
-
+    
+    static public function loadAllMessagesByIdRecivera(mysqli $connection, $userId){
+        $sql = "SELECT * FROM Message WHERE idRecivera ='" . 
+                $connection->mysqli_real_escape_string($userId) . "'ORDER BY creationDate DESC";
+        
+        $messages = [];
+        
+        $result = $connection->query($sql);    
+        if($result == true && $result->num_rows > 0){
+            foreach($result as $row){
+                $row = $result->fetch_assoc();
+                           
+                $loadedMessage = new Messages();
+                $loadedMessage->id = $row['id'];
+                $loadedMessage->idSendera = $row['idSendera'];
+                $loadedMessage->idRecivera = $row['idRecivera']; 
+                $loadedMessage->message = $row['message'];
+                $loadedMessage->$messageRead = $row['messageRead'];
+                $loadedMessage->$creationDate = $row['creationDate'];
+                
+                $messages[] = $message;
+            }
+            return $messages;
+        }
+        else{
+            return null;
+        }
+    }
+    
+    
+    static public function loadAllMessageByMesssageId(mysqli $connection, $messageId){
+        $sql = "SELECT * FROM Message WHERE id = '$massageId'";
+        
+        $result = $connection->query($sql);    
+        if($result == true && $result->num_rows > 0){
+            foreach($result as $row){
+                $row = $result->fetch_assoc();
+                
+                $loadedMessage = new Messages();
+                $loadedMessage->id = $row['id'];
+                $loadedMessage->idSendera = $row['idSendera'];
+                $loadedMessage->idRecivera = $row['idRecivera']; 
+                $loadedMessage->message = $row['message'];
+                $loadedMessage->$messageRead = $row['messageRead'];
+                $loadedMessage->$creationDate = $row['creationDate'];
+                
+                return $loadedMessage;                     
+            }     
+        }
+         else{
+             return null;
+         }
+    }
+    
+    
+    public function delete(mysqli $connection){
+        if($this->id != -1){
+            $sql = "DELETE FROM Tweet WHERE id = '{$this->id}'";
+            
+            $result = $connection->query($sql);
+            
+            if($result == true){
+                $this->id = -1; 
+     
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        return true; 
+       
+    }
+    
+    /*
+    // FUNKCJA DODAJĄCA WIADOMOŚĆ 
+    public function createMessage(mysqli $connection){
+        if($this->id == -1){
+            
+            $sql = "INSERT INTO Message(idSendera, idRecivera, message, messageRead, creationDate)
+                    VALUES ('{$this->idSendera}', '{$this->idRecivera}', '{$this->message}',
+                    '{$this->messageRead}', '{$this->creationDate}')";
+            
+            $result = $connnection->query($sql);
+            if ($result == true){
+                $this->id = $connection->idSendera;
+                return true;
+            }
+        }
+        else{          
+            $sql = "UPDATE Message SET idSendera='{$this->idSendera}',
+                                        idRecivera='{$this->idRecivera}',
+                                        message='{$this->message}',
+                                        idRecivera='{$this->idRecivera}',
+                                        creationDate='{$this->creationDate}'
+                    WHERE id='{$this->id}'";
+            
+            $result = $connection->query($sql);
+            if($result == true){
+                return true;
+            }
+        }
+        return false;
+    }   
+    */
+    
+    
 }
 
 ?>
