@@ -1,6 +1,6 @@
 <?php
 
-include_once "connect.php";
+include_once 'connect.php';
 
 /*
 AUTO_INCREMENT - klucz główny
@@ -9,6 +9,20 @@ PRIMARY KEY - identyfikuje każdy rekord w tabeli - klucz główny
 FOREIGN KEY - klucz obcy słurzący do łączenia dwóch tabel - odnosi się do innej tabeli
 PREFERENCES - klucz obcy zawiera odwołanie do innej tabeli przez umieszczenie w deklarowanej kolumnie wartości z klucza głównego do tamtej tabeli
 */
+
+//Tworzenie nowej bazy danych:
+$sql = "CREATE DATABASE Twitter"; 
+$result = $connect->query($sql);
+
+// sprawdzenie polączenia:
+if ($result != FALSE){
+    echo ("Baza danych Twitter została stworzona poprawnie." . "<br>");
+}
+else{
+    echo("Błąd podczas tworzenia bazy danych!" . "<br>" . $connect->error);
+}
+
+echo "<br>";
 
 // Tworzenie nowej tabeli Users:
 $sql = "CREATE TABLE Users ( 

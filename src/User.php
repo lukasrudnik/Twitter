@@ -48,19 +48,20 @@ class User{
     }
     
     
-    
     // Funkcja haszująca hasło + salt
-    public function setPassword($newPassword){ 
-        $optionSalt = ['cost'=>11];
-        
-        if(is_string($newPassword) && strlen(trim($newPassword)) >= 6){
-            $newHashedPassword = password_hash($newPassword, PASSWORD_BCRYPT, $optionSalt);
-            $this->passwordToHash = $newHashedPassword;
+    public function setPasswordToHash($password){ 
+       // $optionSalt = ['cost'=>11];     
+        if(is_string($password) && strlen(trim($password)) >= 6){
+          //  $newHashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $this->passwordToHash = $password; //$newHashedPassword;
         }
     }
     
+    public function getPasswordToHash(){
+        return $this->passwordToHash;
+    }
     
-    
+       
     // Zapisywanie nowego obiektiu do bazy danych
     public function saveToDB(mysqli $connection){
         // Zapisujemy obiekt do bazy tylko jeżeli jego id jest równe -1
@@ -87,7 +88,7 @@ class User{
                                      hashedPassword = '{$this->passwordToHash}'
                     WHERE id = '{$this->id}'";
             
-            if($connection->query($sql)){            
+            if($connection->query($sql)){                  
                 return true;
             }
             else{       
@@ -101,8 +102,8 @@ class User{
     static public function loadUserById(mysqli $connection, $id) {
         // Funkcja jest statyczna – możemy jej używać na klasie a nie na obiekcie
         
-        $sql = "SELECT * FROM Users WHERE id = $id" . $connection->mysqli_real_escape_string($id);
-        // mysqli_real_escape_string usuwa znaki specjalne 
+        $sql = "SELECT * FROM Users WHERE id = $id";
+        //. mysqli_real_escape_string usuwa znaki specjalne 
         
         $result = $connection->query($sql);
         if($result == true && $result->num_rows == 1){
@@ -117,9 +118,7 @@ class User{
             jesteśmy w środku klasy, więc mamy dostęp do własności prywatnych mimo działania w metodzie statycznej*/         
             return $loadedUser;     
         }
-        else{
-            return null;
-        }    
+        return null;
     }
     
     
@@ -146,54 +145,50 @@ class User{
                 $ret[] = $loadedUser;
                 /*Po stworzeniu i wypełnieniu obiektu danymi wkładamy go do tablicy którą pod koniec zwracamy*/
             }
-            return $ret;
         }
-        else{
-            return null;
-        }     
-    }
+        return $ret;
+    }     
+
     
     
-    // Wczytywanie obiektu oo jego EMAIL
+    // Wczytywanie obiektu przez jego EMAIL
     static public function loadUserByEmail(mysqli $connection, $email){
         
-        $sql = "SELECT * FROM Users WHERE email = $email" . 
-            $connection->mysqli_real_escape_string($email);
+        $sql = "SELECT * FROM Users WHERE email = $email"; 
+          // . $connection->real_escape_string($email);
         
         $result = $connection -> query($sql);      
         if($result == true && $result->num_rows == 1){
             $row = $result->fetch_assoc();
             
-            $loadedUser = new User();
-            $loadedUser->id = $row['id'];
-            $loadedUser->username = $row['username'];
-            $loadedUser->email = $row['email'];
-            $loadedUser->passwordToHash = $row['hashedPassword'];
+            $user = new User();
+            $user->id = $row['id'];
+            $user->username = $row['username'];
+            $user->email = $row['email'];
+            $user->passwordToHash = $row['hashedPassword'];
             
-            return $loadedUser;
+            return $user;
         }
-        else{
-            return null;
-        }
+        return null;
     }
     
+//  
+//    // Wczytywanie obiektu z bazy danych po LOGIN
+//    static public function login(mysqli $connection, $email, $passwordToHash){
+//        
+//        // Łączenie się po poprawnosci emaila i hasła
+//        $loadedUser = self::loadUserByEmail($connection, $email);
+//        // jeżeli chce odwołać się do statycznego pola klasy to wtedy używamy self::pole.
+//        if($loadedUser && password_verify($passwordToHash, $loadedUser->passwordToHash)){
+//            // password_verify - sprawdza, czy hasło pasuje do hash
+//            return $loadedUser;
+//        } 
+//        else {
+//            return false;
+//        }
+//    }
     
-    // Wczytywanie obiektu z bazy danych po LOGIN
-    static public function login(mysqli $connection, $email, $password){
-        
-        // Łączenie się po poprawnosci emaila i hasła
-        $loadedUser = self::loadUserByEmail($connection, $email);
-        // jeżeli chce odwołać się do statycznego pola klasy to wtedy używamy self::pole.
-        if($loadedUser && password_verify($password, $loadedUser->hashedPassword)){
-            // password_verify - sprawdza, czy hasło pasuje do hash
-            return $loadedUser;
-        } 
-        else {
-            return false;
-        }
-    }
-     
-    
+      
     // Usunięcie obiektu 
     public function delete(mysqli $connection){
         if($this->id != -1){
