@@ -41,9 +41,12 @@ echo "logowanie poprawne";
 //}
 ?>
 
-<html lang="pl">
-    <head>
 
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Main Page</title>
     </head>
     <body>
         <nav class="navbar navbar-fixed-top">

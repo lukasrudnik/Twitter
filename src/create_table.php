@@ -1,35 +1,21 @@
 <?php
 
-include_once 'connect.php';
+include_once 'connection.php';
 
 /*
 AUTO_INCREMENT - klucz główny
 UNIQUE - kolumna jest uniklana (brak dwóch takich samych kolumn)
 PRIMARY KEY - identyfikuje każdy rekord w tabeli - klucz główny
-FOREIGN KEY - klucz obcy słurzący do łączenia dwóch tabel - odnosi się do innej tabeli
+FOREIGN KEY - klucz obcy słurzący do łączenia dwóch tabel - odnosi się do innej tabeli
 PREFERENCES - klucz obcy zawiera odwołanie do innej tabeli przez umieszczenie w deklarowanej kolumnie wartości z klucza głównego do tamtej tabeli
 */
 
-//Tworzenie nowej bazy danych:
-$sql = "CREATE DATABASE Twitter"; 
-$result = $connect->query($sql);
-
-// sprawdzenie polączenia:
-if ($result != FALSE){
-    echo ("Baza danych Twitter została stworzona poprawnie." . "<br>");
-}
-else{
-    echo("Błąd podczas tworzenia bazy danych!" . "<br>" . $connect->error);
-}
-
-echo "<br>";
-
 // Tworzenie nowej tabeli Users:
 $sql = "CREATE TABLE Users ( 
-        id INT PRIMARY KEY AUTO_INCREMENT,
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         email VARCHAR(255) NOT NULL UNIQUE,
         username VARCHAR(255) NOT NULL,
-        hashedPassword VARCHAR(255) NOT NULL
+        hashed_password VARCHAR(255) NOT NULL
         )";
 
 //Sprawdzenie czy tabela stworzyla sie poprawnie:
@@ -40,7 +26,6 @@ if($result === TRUE){
 else{
     ("Błąd podczas tworzenia tabeli Users!" . "<br>" . $connect->error);
 }
-
 echo "<br>";
 
 // Tworzenie tabeli Tweet:
@@ -61,7 +46,6 @@ if($result === TRUE){
 else{
     ("Błąd podczas tworzenia babeli Tweet!" . "<br>" . $connect->error);
 }
-
 echo "<br>";
 
 // Tworzenie tabeli Comment:
@@ -84,7 +68,6 @@ if($result === TRUE){
 else{
     ("Błąd podczas tworzenia babeli Comment!" . "<br>" . $connect->error);
 }
-
 echo "<br>";
 
 // Tworzenie tabeli Message
@@ -108,7 +91,6 @@ if($result === TRUE){
 else{
     ("Błąd podczas tworzenia babeli Message!" . "<br>" . $connect->error);
 }
-
 echo "<br>";
 
 ?>

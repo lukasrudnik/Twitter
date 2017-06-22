@@ -1,6 +1,6 @@
 <?php
 
-require_once 'src/connect.php';
+require_once 'src/connection.php';
 
 spl_autoload_register(function($class){
     require_once "src/{$class}.php";

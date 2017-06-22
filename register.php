@@ -14,17 +14,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $user = new User();
         $user->SetUsername(trim($_POST['username']));
         $user->SetEmail(trim($_POST['email']));
-        $user->setPasswordToHash(trim($_POST['password']));
+        $user->setHashedPassword(trim($_POST['password']));
                   
         if($user->saveToDB($connect)){
-             echo "Udało sie zarejestrowac użytkownika";
+             echo ("Udało sie zarejestrowac użytkownika");
         }
         else{
-            echo "Niestety nie udało się zarejestrować użytkownika, podany e-mail już istnieje w bazie danch!";
+            echo ("Unfortunately, we failed to register the new user, 
+            the given email already exists in the database, please change your e-mail!");
         }
     }
     else{
-        echo "Błędne dane w formularzu, sprawdź poprawność i spróbuj ponownie!";
+        echo ("Incorrect data in form, validate and try again!");
     }
 }
 
@@ -36,7 +37,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
        <meta charset="UTF-8">
        <title>Register Page</title>
     </head>
-   <body>
+    <body>
         <form method ='POST'>
             <label>
                 User name: 
@@ -46,7 +47,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             <br>
             <label>
                 E-mail:<br>
-                <input type="text" name="email">
+                <input type="email" name="email">
             </label>
             <br>
             <label>
