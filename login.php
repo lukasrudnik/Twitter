@@ -15,17 +15,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' &&
     $password = trim($_POST['password']);    
     
     if(!empty($_POST['email']) . $connect->real_escape_string($email) && 
-       !empty($_POST['password']) . $connect->real_escape_string($email)){
+       !empty($_POST['password']) . $connect->real_escape_string($email)){        
         // usuwanie znaków specjalnych jeśli hasło i email nie są puste
         
         $sql = "SELECT * FROM Users WHERE email = '$email'"; 
         $query = $connect->query($sql);
         // połączenie do email w tabeli Users
+    
+        if(!`mysqli_num_rows` > 0){
+            echo "Please check the correctness of contents! <br>";
+        }
+        // sprawdzenie czy podany email lub hasło są w bazie danych 
+        // używam tego do spawdzenia czy email jest w bazie danych
         
         if($query->num_rows > 0){
             $row = $query->fetch_assoc();  
             // pobieranie rzędu w tablicy assocjacyjnej
-            
+                                    
             $userPassword = $row['hashed_password'];
             $checkPassword = password_verify($password, $userPassword);
             // sprawdzenie podanego w formularzu hasła z hasłem zapisanym w bazie danych
@@ -36,22 +42,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' &&
                 // ustawienie sesji i przekierowanie na stronę główną
             }
             else{
-                echo ("Wrong e-mail or password, please check password and try again!");
-            }
+                echo ("Wrong e-mail or password, please check password and try again! <br>");
+            }   
         }
-        
-//        $sql = "SELECT * FROM Users WHERE username = '$username'"; 
-//        $query = $connect->query($sql);
-//        
-//        if($query->num_rows > 0){
-//            $row = $query->fetch_assoc();
-//            
-//            $username = $row['username'];
-//            
-//            if(!$userName){
-//                echo (";(");
-//            }       
-//        }
     }
 }
 
