@@ -7,7 +7,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' &&
             isset($_POST['email']) && (strlen(trim($_POST['email'])) >= 6) && 
             isset($_POST['password']) && (strlen(trim($_POST['email'])) >= 6)){
        
-    if (strlen(trim($_POST['email'])) && strlen(trim($_POST['password'])) < 6){
+    if(strlen(trim($_POST['email'])) && strlen(trim($_POST['password'])) < 6){
         echo ("e-mail and password must be have minimum 6 characters! <br>");
     }
    

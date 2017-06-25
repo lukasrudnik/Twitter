@@ -10,35 +10,33 @@ if (!isset($_SESSION['userId'])){
     header('Location: login.php');
 }
 
-echo "logowanie poprawne";
+$userSession = $_SESSION['userId'];
+$loggedUser = User::loadUserById($connect, $userSession);
+// dodanie sesji użytkownika i połączenie z loadUserById w klasie User
 
-
-//
-//$loggedUserId = $_SESSION['userId'];
-//$loggedUser = User::loadUserById($connect, $loggedUserId);
-//if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['addTweetForm']) && strlen(trim($_POST['addTweet'])) > 0) {
-//    $tweet = new Tweet();
-//    $tweet->setText($_POST['addTweet']);
-//    $tweet->setUserId($loggedUserId);
-//    $tweet->setCreationDate(date('Y-m-d-h:i:s'));
-//    if ($tweet->saveToDB($conn)) {
-//        echo 'Dodano Tweeta ' . $_POST['addTweet'] . "<br>";
-//    } else {
-//        echo 'wystapil problem z dodawaniem tweeta';
-//    }
-//}
-//if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['addCommentForm']) && strlen(trim($_POST['addComment'])) > 0) {
-//    $comment = new Comment ();
-//    $comment->setText($_POST['addComment']);
-//    $comment->setId_usera($loggedUserId);
-//    $comment->setId_postu($_POST['tweetId']);
-//    $comment->setCreationDate(date('Y-m-d-h:i:s'));
-//    if ($comment->saveToDB($conn)) {
-//        echo 'Dodano komentarz ' . $_POST['addComment'] . '<br>';
-//    } else {
-//        echo 'wystapil blad z dodawaniem komentarza';
-//    }
-//}
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['addTweetForm']) && strlen(trim($_POST['addTweet'])) > 0) {
+    $tweet = new Tweet();
+    $tweet->setText($_POST['addTweet']);
+    $tweet->setUserId($loggedUserId);
+    $tweet->setCreationDate(date('Y-m-d-h:i:s'));
+    if ($tweet->saveToDB($conn)) {
+        echo 'Dodano Tweeta ' . $_POST['addTweet'] . "<br>";
+    } else {
+        echo 'wystapil problem z dodawaniem tweeta';
+    }
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['addCommentForm']) && strlen(trim($_POST['addComment'])) > 0) {
+    $comment = new Comment ();
+    $comment->setText($_POST['addComment']);
+    $comment->setId_usera($loggedUserId);
+    $comment->setId_postu($_POST['tweetId']);
+    $comment->setCreationDate(date('Y-m-d-h:i:s'));
+    if ($comment->saveToDB($conn)) {
+        echo 'Dodano komentarz ' . $_POST['addComment'] . '<br>';
+    } else {
+        echo 'wystapil blad z dodawaniem komentarza';
+    }
+}
 ?>
 
 
