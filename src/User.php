@@ -98,7 +98,7 @@ class User{
   
     
     // Wczytywanie obiektu z bazy danych po ID
-    static public function loadUserById(mysqli $connection, $id) {
+    static public function loadUserById(mysqli $connection, $id){
         // Funkcja jest statyczna – możemy jej używać na klasie a nie na obiekcie
         
         $sql = "SELECT * FROM Users WHERE id = $id";

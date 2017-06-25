@@ -98,9 +98,9 @@
         $comments = [];
         
         $result = $connection->query($sql);    
-        if($result == true && $result->num_rows > 0){
+        if($result == true){
             foreach($result as $row){
-                $row = $result->fetch_assoc();
+            //    $row = $result->fetch_assoc();
                 
                 $loadedComment = new Comment();
                 $loadedComment->id = $row['id'];
@@ -121,26 +121,25 @@
      
      // ...  Funkcję loadAllCommentsByPostId
      static public function loadCommentByTweetId(mysqli $connection, $idPostu){
-        $sql = "SELECT * FROM Comment WHERE idPostu = $idPostu" .
-            $connection->mysqli_real_escape_string($idPostu);
+        $sql = "SELECT * FROM Comment WHERE idPostu = $idPostu";
         
         $comments = [];
         
         $result = $connection->query($sql);    
-        if($result == true && $result->num_rows > 0){
+        if($result == true){
             foreach($result as $row){
-                $row = $result->fetch_assoc();
+            //    $row = $result->fetch_assoc();
                 
-                $loadedComment = new Comment();
-                $loadedComment->id = $row['id'];
-                $loadedComment->idUsera = $row['idUsera'];
-                $loadedComment->idPostu = $row['idPostu'];
-                $loadedComment->text = $row['text'];
-                $loadedComment->creationDate = $row['creationDate'];
+                $comment = new Comment();
+                $comment->id = $row['id'];
+                $comment->idUsera = $row['idUsera'];
+                $comment->idPostu = $row['idPostu'];
+                $comment->text = $row['text'];
+                $comment->creationDate = $row['creationDate'];
                 
-                $comments[] = $loadedComment;           
+                $comments[] = $comment;           
             }
-            return $loadedComment;
+            return $comments;
         }
         else{
             return null;

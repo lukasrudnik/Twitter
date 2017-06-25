@@ -137,16 +137,16 @@ class Tweet{
         $tweets = [];
         
         $result = $connection->query($sql);    
-        if($result == true && $result->num_rows != 0){
-            foreach($result as $row){
+        if($result == true){
+            
+            foreach($result as $row){     
+                $tweet = new Tweet();
+                $tweet->id = $row['id'];
+                $tweet->userId = $row['userId']; 
+                $tweet->text = $row['text'];
+                $tweet->creationDate = $row['creationDate'];             
                 
-                $loadedTweet = new Tweet();
-                $loadedTweet->id = $row['id'];
-                $loadedTweet->userId = $row['userId']; 
-                $loadedTweet->text = $row['text'];
-                $loadedTweet->creationDate = $row['creationDate'];             
-                
-                $tweets[] = $loadedTweet;           
+                $tweets[] = $tweet;           
             }
             return $tweets;
         }
