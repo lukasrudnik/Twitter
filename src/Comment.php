@@ -93,14 +93,13 @@
      // ... Funkcję loadCommentById
      static public function loadCommentByUserId(mysqli $connection, $idUsera){
         $sql = "SELECT * FROM Comment WHERE idUsera = " .
-            $connection->mysqli_real_escape_string($idUsera) . "ORDER BY creationDate DESC";
+                $connection->real_escape_string($idUsera) . "ORDER BY creationDate DESC";
         
         $comments = [];
         
         $result = $connection->query($sql);    
         if($result == true){
             foreach($result as $row){
-            //    $row = $result->fetch_assoc();
                 
                 $loadedComment = new Comment();
                 $loadedComment->id = $row['id'];
@@ -121,14 +120,14 @@
      
      // ...  Funkcję loadAllCommentsByPostId
      static public function loadCommentByTweetId(mysqli $connection, $idPostu){
-        $sql = "SELECT * FROM Comment WHERE idPostu = $idPostu";
+        $sql = "SELECT * FROM Comment WHERE idPostu = " . 
+                $connection->real_escape_string($idPostu);
         
         $comments = [];
         
         $result = $connection->query($sql);    
         if($result == true){
             foreach($result as $row){
-            //    $row = $result->fetch_assoc();
                 
                 $comment = new Comment();
                 $comment->id = $row['id'];

@@ -82,7 +82,7 @@ class Tweet{
     
     static public function loadTweetById(mysqli $connection, $id){
         
-        $sql = "SELECT * FROM Tweet WHERE id = $id" . $connection->mysqli_real_escape_string($id);
+        $sql = "SELECT * FROM Tweet WHERE id = $id" . $connection->real_escape_string($id);
     
         $result = $connection->query($sql);
         if($result == true && $result->num_rows == 1){
@@ -104,24 +104,23 @@ class Tweet{
     
     static public function loadTweetByUserId(mysqli $connection, $userId){
         $sql = "SELECT * FROM Tweet WHERE userId = $userId" .
-            $connection->mysqli_real_escape_string($userId);
+            $connection->real_escape_string($userId);
         
         $tweets = [];
         
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
             foreach($result as $row){
-                $row = $result->fetch_assoc();
                 
-                $loadedTweet = new Tweet();
-                $loadedTweet->id = $row['id'];
-                $loadedTweet->userId = $row['userId']; 
-                $loadedTweet->text = $row['text'];
-                $loadedTweet->creationDate = $row['creationDate'];
+                $tweet = new Tweet();
+                $tweet->id = $row['id'];
+                $tweet->userId = $row['userId']; 
+                $tweet->text = $row['text'];
+                $tweet->creationDate = $row['creationDate'];
                 
-                $tweets[] = $loadedTweet;           
+                $tweets[] = $tweet;           
             }
-            return $loadedTweet;
+            return $tweets;
         }
         else{
             return null;

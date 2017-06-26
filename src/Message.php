@@ -102,14 +102,13 @@ class Message{
     
     static public function loadAllMessagesByUserId(mysqli $connection, $idSendera){
         $sql = "SELECT * FROM Message WHERE idSendera =" .
-            $connection->mysqli_real_escape_string($idSendera) . "ORDER BY creationDate DESC";
+            $connection->real_escape_string($idSendera) . "ORDER BY creationDate DESC";
         
         $messages = [];
         
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
             foreach($result as $row){
-                $row = $result->fetch_assoc();
                 
                 $loadedMessage = new Messages();
                 $loadedMessage->id = $row['id'];
@@ -132,7 +131,7 @@ class Message{
     czy wiadomość została przeczytana np.: 1–wiadomośćprzeczytana, lub, 0–wiadomośćnieprzeczytana) */
     static public function updateMessageRead(mysqli $connection, $messageId){
         $sql = "SELECT * FROM Message WHERE id ='" . 
-                $connection->mysqli_real_escape_string($messageId) . "'";
+                $connection->real_escape_string($messageId) . "'";
         
         $result = $connection->query($sql);
         if($result){
@@ -152,14 +151,13 @@ class Message{
     
     static public function loadAllMessagesByIdRecivera(mysqli $connection, $userId){
         $sql = "SELECT * FROM Message WHERE idRecivera ='" . 
-                $connection->mysqli_real_escape_string($userId) . "'ORDER BY creationDate DESC";
+                $connection->real_escape_string($userId) . "'ORDER BY creationDate DESC";
         
         $messages = [];
         
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
             foreach($result as $row){
-                $row = $result->fetch_assoc();
                            
                 $loadedMessage = new Messages();
                 $loadedMessage->id = $row['id'];
@@ -254,8 +252,7 @@ class Message{
         return false;
     }   
     */
-    
-    
+      
 }
 
 ?>
