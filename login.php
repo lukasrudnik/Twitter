@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' &&
     $password = trim($_POST['password']);    
     
     if(!empty($_POST['email']) . $connect->real_escape_string($email) && 
-       !empty($_POST['password']) . $connect->real_escape_string($email)){        
+       !empty($_POST['password']) . $connect->real_escape_string($password)){        
         // usuwanie znaków specjalnych jeśli hasło i email nie są puste
         
         $sql = "SELECT * FROM Users WHERE email = '$email'"; 

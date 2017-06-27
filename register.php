@@ -10,22 +10,27 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
        && isset($_POST['repeadPassword'])
        && trim($_POST['repeadPassword']) === trim($_POST['password'])){
        //Powtórzenie hasła do rejestracji
-         
-        $user = new User();
-        $user->SetUsername(trim($_POST['username']));
-        $user->SetEmail(trim($_POST['email']));
-        $user->setHashedPassword(trim($_POST['password']));
+        
+        if(!empty($_POST['email']) . $connect->real_escape_string($_POST['email']) && 
+           !empty($_POST['password']) . $connect->real_escape_string($_POST['password'])){        
+            // usuwanie znaków specjalnych jeśli hasło i email nie są puste
+            
+            $user = new User();
+            $user->setUsername(trim($_POST['username']));
+            $user->setEmail(trim($_POST['email']));
+            $user->setHashedPassword(trim($_POST['password']));
                   
-        if($user->saveToDB($connect)){
-             echo ("Udało sie zarejestrowac użytkownika");
+            if($user->saveToDB($connect)){
+                echo ("Successfully registered new user!");
+            }
+            else{
+                echo ("Unfortunately, we failed to register the new user, 
+            the given email already exists in the database, please change your e-mail!");
+            }
         }
         else{
-            echo ("Unfortunately, we failed to register the new user, 
-            the given email already exists in the database, please change your e-mail!");
-        }
-    }
-    else{
-        echo ("Incorrect data in form, validate and try again!");
+            echo ("Incorrect data in form, validate and try again!");
+        }   
     }
 }
 

@@ -65,23 +65,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
     <body>
         Welcome:
         <?php
-        echo $loggedUser->getUsername() . "!"; 
+            echo $loggedUser->getUsername() . "!"; 
         ?>
         <!-- powitanie zalogowanego użytkownika -->
         <ul>
             <li>
                 <a href="user_page.php"> 
                 <?php
-                echo $loggedUser->getUsername() 
+                    echo $loggedUser->getUsername() 
                 ?>
                 page </a>    
                 <!-- przekierowanie na stronę --> 
             </li>
             <li>
                 <?php 
-                if(isset($_SESSION['userId'])){
-                echo "<a href='logout.php'>Logout</a>";
-                } 
+                    if(isset($_SESSION['userId'])){
+                        echo "<a href='logout.php'>Logout</a>";
+                    } 
                 ?>
                 <!-- Wylogowanie zalogowanego użytkownika -->
             </li>
@@ -103,13 +103,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             // Wyświetlenie wszystkich użytkowników w nie w tej sesji
             if($user->getId() != $userSession){
                 echo $user->getUsername() . " ----> ";
-                echo '<a href="notice.php?userId=' . $user->getId() . '">Send message</a> <br>';
+                echo '<a href="notice.php?userId=' . $user->getId() . '">Send message</a><br>';
             }
         }
         echo ('<h3><br>Tweets lists:</h3>');
         
         
-        // Dodawanie Tweeta - połączenie z loadAllTweets w klasie Tweet
+        // Wyświetlanie Tweetów - połączenie z loadAllTweets w klasie Tweet
         $tweets = Tweet::loadAllTweets($connect);      
         foreach($tweets as $tweet){      
             // Pobieranie ID autora tweeta tweeta z klasy Tweet
@@ -122,7 +122,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             echo 'Content: ' . $tweet->getText() . '<br>';
             
 
-            // Połączenie z loadCommentsByTweetId w klasie Comment - dodawanie komentarza
+            //Wyświetlanie Komentarzy Połączenie z loadCommentsByTweetId w klasie Comment
             $comments = Comment::loadCommentByTweetId($connect, $tweet->getId());
             foreach($comments as $comment){
                 // Pobieranie ID autora komentarza z klasy Comment

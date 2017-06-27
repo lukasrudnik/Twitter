@@ -55,13 +55,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
     <title>User page</title>
 </head>
     <body>
+        Welcome: 
+        <?php
+        echo $loggedUser->getUsername() . "!";
+        ?>
         <ul>
-            <li>
-                Welcome: 
-                <?php
-                echo $loggedUser->getUsername() . "!";
-                ?>
-            </li>
             <li>
                 <a href="index.php">Tweet page</a>
             </li>
@@ -81,19 +79,21 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
             </li>
         </ul>
         <?php
-        
+
         // Wyświetlanie ilości tweetów użytkownika tej sesji i komentarzy do nich 
-        if(isset($_SESSION['userId'])){
-            
-            $tweets = Tweet::loadTweetByUserId($connect, $userSession);
-            
-            if(count($tweets) > 0){       
-                foreach($tweets as $tweet){
-                    $user = User::loadUserById($connect, $userSession);
-                    echo $user->getUsername();
-                    echo $tweet->getCreationDate();
-                    echo $tweet->getText();
+//         if(isset($_SESSION['userId'])){
+//            
+//            $tweets = Tweet::loadTweetById($connect, $userSession);
+//            
+//            if(count($tweets) > 0){       
+//                foreach($tweets as $tweet){
+//                    $user = User::loadUserById($connect, $loggedUser);
+//                    echo $user->getUsername();
+//                    echo $tweet->getCreationDate();
+//                   echo $tweet->getText();
                     
+
+            
 //                    $comments = Comment::loadCommentByTweetId($connect, $tweet->getId());
 //                    $numberOfComments = count($comments);
                     
@@ -113,16 +113,30 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
 //                    <input type="text" name="newComment">
 //                    <input type="hidden" name="tweetId" value="' . $tweet->getId() . '"> <br> 
 //                    <input role="button" class="btn btn-warning" type="submit" value="Dodaj komentarz">
-//                    </form>
-//                    </div>';
-                }
-            }
-            else{
-                echo 'nie masz jeszcze żadnych tweetów';
-            }
-        }
+////                    </form>
+////                    </div>';
+    
+                
+//                }
+//            }
+//            else{
+//                echo 'nie masz jeszcze żadnych tweetów';
+//            }
+//        }
 
-//       }
+               // Wyświetlanie Tweetów - połączenie z loadAllTweets w klasie Tweet
+        $tweets = Tweet::loadAllTweets($connect);      
+        foreach($tweets as $tweet){      
+            // Pobieranie ID autora tweeta tweeta z klasy Tweet
+            $authorTweetId = $tweet->getUserId();
+            // Autor tweeta pobrany z klasy User z loadUserbyId oraz z getUserId z klasy Tweet
+            // User id jest kluczem nadrzędnym id z klasy Tweet
+            $authorTweet = User::loadUserbyId($connect, $authorTweetId);     
+            echo $authorTweet->getUsername() . ' added tweet at time: ' . ' ';
+            echo $tweet->getCreationDate() . '<br>';
+            echo 'Content: ' . $tweet->getText() . '<br>';
+        }
+        
         ?>
             
          <?php
@@ -179,16 +193,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
         ?>
 
          
-                    <h3>lista użytkowników:</h3>
-                    <?php
-                    $allUsers = User::loadAllUsers($connect);
-                    foreach ($allUsers as $user) {
-                        if ($user->getId() != $userSession) {
-                            echo '<div class="showUser">' . $user->getUsername();
-                            echo ' <a href="notice.php?userId=' . $user->getId() . '">Send message</a></div><br>';
-                        }
-                    }
-                    ?>
+        <h3>Users lists:</h3>
+        <?php
+          $allUsers = User::loadAllUsers($connect);
+            foreach ($allUsers as $user) {
+                 if ($user->getId() != $userSession) {
+                      echo $user->getUsername()  . " ----> ";
+                       echo ' <a href="notice.php?userId=' . $user->getId() . '">Send message</a><br>';
+                   }
+            }
+        ?>
 
     </body>
 </html>
