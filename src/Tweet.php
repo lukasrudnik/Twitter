@@ -111,7 +111,6 @@ class Tweet{
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
             foreach($result as $row){
-  //              $row = $result->fetch_assoc();
                 
                 $tweet = new Tweet();
                 $tweet->id = $row['id'];

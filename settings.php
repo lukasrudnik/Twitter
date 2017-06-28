@@ -20,7 +20,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
       
        && isset($_POST['repeadPassword'])
        && trim($_POST['repeadPassword']) === trim($_POST['password'])){
-             
+         
+        // zabezpieczeine przed mysql injection
         if(!empty($_POST['email']) . $connect->real_escape_string($_POST['email']) && 
            !empty($_POST['password']) . $connect->real_escape_string($_POST['password']) &&
            !empty($_POST['username']) . $connect->real_escape_string($_POST['username'])){
@@ -57,7 +58,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         ?>
         <ul>
             <li>
-                <a href="index.php">Tweet page</a>
+                <a href="index.php">Main page</a>
             </li>
             <li>
                 <a href="user_page.php"> 

@@ -130,8 +130,7 @@ class Message{
     /* Aktualizacja nieprzeczytanych wiadomośći: W tabeli stwórz pole trzymające informację, 
     czy wiadomość została przeczytana np.: 1–wiadomośćprzeczytana, lub, 0–wiadomośćnieprzeczytana) */
     static public function updateMessageRead(mysqli $connection, $messageId){
-        $sql = "SELECT * FROM Message WHERE id ='" . 
-                $connection->real_escape_string($messageId) . "'";
+        $sql = "SELECT * FROM Message WHERE id ='";
         
         $result = $connection->query($sql);
         if($result){
@@ -178,7 +177,7 @@ class Message{
     
     
     static public function loadAllMessageByMesssageId(mysqli $connection, $messageId){
-        $sql = "SELECT * FROM Message WHERE id = '$massageId'";
+        $sql = "SELECT * FROM Message WHERE id = '$messageId'";
         
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
