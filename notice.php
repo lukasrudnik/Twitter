@@ -10,10 +10,11 @@ if(!isset($_SESSION['userId'])){
 $userSession = $_SESSION['userId'];
 $loggedUser = User::loadUserById($connect, $userSession);
 
+$mess = $_SESSION['messageId'];
 // połączenie z kasa Message z funkcją statczną
-Message::updateMessageRead($connect, $userSession); 
+Message::updateMessageRead($connect, $mess); 
 //Message::updateMessageRead($connect, $_GET['messageId']);
-$message = Message::loadAllMessageByMesssageId($connect, $userSession);
+$message = Message::loadAllMessageByMesssageId($connect, $mess);
 
 ?>
 
@@ -60,7 +61,7 @@ $message = Message::loadAllMessageByMesssageId($connect, $userSession);
             
             foreach ($allUsers as $user){
                 if ($user->getId() != $loggedUserId){
-                    echo $user->getUserame();
+                    echo $user->getUsername();
                     echo '<a href="user_page.php?userId=' . $user->getId() . '">Send message</a<br>';
                 }
             }

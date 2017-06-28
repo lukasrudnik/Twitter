@@ -144,7 +144,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             <form method="POST">
             <input type="hidden" name="newCommentForm" value="newCommentForm">
             <input type="text" name="newComment">
-            <input type="hidden" name="tweetId" value="' . $tweet->getID() . '"> 
+            <input type="hidden" name="tweetId" value="' . $tweet->getId() . '"> 
             <input role="button" type="submit" value="Add new Comment">
             </form>') . "<br><br>";
         }

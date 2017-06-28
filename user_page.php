@@ -48,7 +48,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
         echo 'Error sending message!';
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -87,7 +86,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
            
         
         // Wyświetlanie ilości tweetów użytkownika tej sesji
-         if(isset($_SESSION['userId'])){      
+        if(isset($_SESSION['userId']) == $loggedUser){      
             $tweets = Tweet::loadTweetByUserId($connect, $userSession);
             
             if(count($tweets) > 0){       
@@ -114,24 +113,32 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                         echo 'Created: ' . $comment->getCreationDate() . "<br>";
                         echo 'Content: ' . $comment->getText() . "<br>";
                     }
-                    echo '<br><hr>';
+                    
+                    // formularz do wysyłania komentarza
+                    echo ('<form method="POST">
+                    <input type="hidden" name="newCommentForm" value="addCommentForm">
+                    <input type="text" name="newComment">
+                    <input type="hidden" name="tweetId" value="' . $tweet->getId() . '">
+                    <input role="button" type="submit" value="Add new Comment">
+                    </form>') . "<br>";
+                    echo '<hr>';
                 }
             }
             else{
                 echo "You don't have any tweets yet <br>";
             }
         }
-
         
-        // Wysłane i otrzymane wiadomośći
-        if(isset($_SESSION['userId']) != $userSession){
-            echo ' Wyślij użytkownikowi wiadomość :
+        
+        // Wysyłane i otrzymane wiadomośći
+        if(isset($_SESSION['userId'])){
+            echo (' Send user a message :
             <form method="POST" >
             <input type="hidden" name="messageForm" value="messageForm">
-            <input type="hidden" name="receiver" value="' . $_GET['userId'] . '">
+            <input type="hidden" name="receiver" value="' . ($_SESSION['userId']) . '">
             <input type="text" name="message">
-            <input type="submit" value="Wyslij wiadomość">
-            </form >';
+            <input type="submit" value="Send message">
+            </form > ');
         }
         else{
             echo '<h3>Received messages:</h3>';
@@ -175,6 +182,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
             }
         }
         
+        
         // Wyświetlanie pozostałych użytkowników
         if(isset($_SESSION['userId']) == $loggedUser){ 
             // != oznacza że są widoczni tylko zalogowani użytkownicy
@@ -190,7 +198,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                 }
             }
         }
-
+        
         ?>
     </body>
 </html>
