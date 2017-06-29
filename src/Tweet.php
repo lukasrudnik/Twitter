@@ -82,7 +82,7 @@ class Tweet{
     
     static public function loadTweetById(mysqli $connection, $id){
         
-        $sql = "SELECT * FROM Tweet WHERE id = $id";
+        $sql = "SELECT * FROM Tweet WHERE id = $id" . $connection->real_escape_string($id);
     
         $result = $connection->query($sql);
         if($result == true && $result->num_rows == 1){

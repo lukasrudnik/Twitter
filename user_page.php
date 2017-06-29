@@ -70,7 +70,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                 if(isset($_SESSION['userId'])){
                     echo "<a href='settings.php'>Settings page</a>";
                     // przekierowanie na stronę zmiany danych użytkwnika
-                };
+                }
                 ?>
             </li>
             <li>
@@ -82,11 +82,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
             </li>
         </ul>
         <h3><br>Your tweets:</h3>
-       <?php
-           
-        
-        // Wyświetlanie ilości tweetów użytkownika tej sesji
-        if(isset($_SESSION['userId']) == $loggedUser){      
+    </body>
+</html>
+      
+<?php
+            
+        if(isset($_SESSION['userId']) == $userSession){
+            
+            // Wyświetlanie ilości tweetów użytkownika tej sesji
             $tweets = Tweet::loadTweetByUserId($connect, $userSession);
             
             if(count($tweets) > 0){       
@@ -116,10 +119,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                     
                     // formularz do wysyłania komentarza
                     echo ('<form method="POST">
-                    <input type="hidden" name="newCommentForm" value="addCommentForm">
-                    <input type="text" name="newComment">
+                    <input type="hidden" name="newCommentForm" value="newCommentForm">
+                    <input type="text" name="newComment" placeholder="only 60 characters">
                     <input type="hidden" name="tweetId" value="' . $tweet->getId() . '">
-                    <input role="button" type="submit" value="Add new Comment">
+                    <input type="submit" value="Add new Comment">
                     </form>') . "<br>";
                     echo '<hr>';
                 }
@@ -127,25 +130,37 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
             else{
                 echo "You don't have any tweets yet <br>";
             }
-        }
+
+
+            // Wyświetlanie pozostałych użytkowników
+            echo '<h3>Users lists:</h3>';
+  
+            // Wyświetlenie wszystkich użytkowników w nie w tej sesji
+            $allUsers = User::loadAllUsers($connect);    
+            foreach($allUsers as $user){  
+                
+                // != oznacza że są widoczni użytkownicy nie tej sesji
+                if($user->getId() != $userSession){
+                    
+                    // formularz do wysyłania wiadomości
+                    echo $user->getUsername() . " ----> ";  
+                    echo (' Send message to this user
+                    <form method="POST" >
+                    <input type="hidden" name="messageForm" value="messageForm">
+                    <input type="text" name="message" placeholder="only 255 characters">
+                    <input type="hidden" name="receiver" value="' . $user->getId() . '">
+                    <input type="submit" value="Send message">
+                    </form > ') . "<br>";
+                }
+            }
+
         
-        
-        // Wysyłane i otrzymane wiadomośći
-        if(isset($_SESSION['userId'])){
-            echo (' Send user a message :
-            <form method="POST" >
-            <input type="hidden" name="messageForm" value="messageForm">
-            <input type="hidden" name="receiver" value="' . ($_SESSION['userId']) . '">
-            <input type="text" name="message">
-            <input type="submit" value="Send message">
-            </form > ');
-        }
-        else{
+            // Wysyłane wiadomośći
             echo '<h3>Received messages:</h3>';
             $messages = Message::loadAllMessagesByIdRecivera($connect, $userSession);
             
             if(count($messages) > 0){
-                foreach ($messages as $message){
+                foreach($messages as $message){
                     $messageAuthorId = $message->getIdSendera();
                     $messageAuthor = User::loadUserbyId($connect, $messageAuthorId);  
                     
@@ -154,17 +169,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                     if($message->getMessageRead() == 0){
                         echo 'Unread message';
                     }
-                    echo 'Received on: ' . $message->getCreationDate();
-                    echo substr($message->getMessage(), 0, 29);
-                    echo '<a href="message.php?messageId=' . $message->getId() .
+                        echo 'Received on: ' . $message->getCreationDate();
+                        echo substr($message->getMessage(), 0, 10);
+                        echo '<a href="notice.php?messageId=' . $message->getId() .
                         '">Read message now</a>';
                 }
             }
             else{
                 echo "You don't have any messages yet";
             }
-            echo '<h3>Sended messages:</h3>';
-            
+
+           // Otrzymane wiadomośći 
+            echo '<h3>Sended messages:</h3>';      
             $messages = Message::loadAllMessagesByUserId($connect, $userSession);
             
             if(count($messages) > 0){
@@ -172,33 +188,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                     
                     $messageReceiverId = $message->getIdRecivera();
                     $messageReceiver = User::loadUserbyId($connect, $messageReceiverId);
-                    echo 'Message sent to: ' . $messageReceiver->getUserame();
+                    echo 'Message sent to: ' . $messageReceiver->gerId();
                     echo 'Received on: ' . $message->getCreationDate();
                     echo $message->getMessage() . '<br>';
                 }
             }
             else{
                 echo 'You have not received any messages yet';
-            }
+            }            
         }
-        
-        
-        // Wyświetlanie pozostałych użytkowników
-        if(isset($_SESSION['userId']) == $loggedUser){ 
-            // != oznacza że są widoczni tylko zalogowani użytkownicy
-            echo '<h3>Users lists:</h3>';
-            
-            $allUsers = User::loadAllUsers($connect);
-           
-            // Wyświetlenie wszystkich użytkowników w nie w tej sesji
-            foreach($allUsers as $user){  
-                if($user->getId() != $userSession){
-                    echo $user->getUsername() . " ----> ";
-                    echo '<a href="user_page.php?userId=' . $user->getId() . '">Send message</a><br>';       
-                }
-            }
-        }
-        
-        ?>
-    </body>
-</html>
+
+?>

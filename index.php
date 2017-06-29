@@ -88,9 +88,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
         </ul>        
         <h3><br>Add new Tweet:</h3>
         <form action="#" method="POST">
-            <input type="text" name="newTweet">
+            <input type="text" name="newTweet" placeholder="only 140 characters">
             <input type="hidden" name="newTweetForm" value="newTweetForm">
-            <input role="button" class="btn btn-default" type="submit" value="Add new Tweet">
+            <input role="button" class="btn btn-default" type="submit"  value="Add new Tweet">
         </form>          
         <h3><br>Users lists:</h3>
         
@@ -122,7 +122,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             $authorTweet = User::loadUserbyId($connect, $authorTweetId);     
             echo $authorTweet->getUsername() . ' added tweet <br> at time: ' . ' ';
             echo $tweet->getCreationDate() . '<br>';
-            echo 'Content: ' . $tweet->getText() . '<br>';
+            echo 'Content: ' . $tweet->getText() . '<br><br> Comments below: <br>';
             
 
             //Wyświetlanie Komentarzy Połączenie z loadCommentsByTweetId w klasie Comment
@@ -143,10 +143,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             echo ('
             <form method="POST">
             <input type="hidden" name="newCommentForm" value="newCommentForm">
-            <input type="text" name="newComment">
+            <input type="text" name="newComment" placeholder="only 60 characters">
             <input type="hidden" name="tweetId" value="' . $tweet->getId() . '"> 
             <input role="button" type="submit" value="Add new Comment">
-            </form>') . "<br><br>";
+            </form>') . "<br><hr>";
         }
         
         ?>

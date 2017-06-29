@@ -9,12 +9,10 @@ if(!isset($_SESSION['userId'])){
 
 $userSession = $_SESSION['userId'];
 $loggedUser = User::loadUserById($connect, $userSession);
-
-$mess = $_SESSION['messageId'];
-// połączenie z kasa Message z funkcją statczną
-Message::updateMessageRead($connect, $mess); 
+    
 //Message::updateMessageRead($connect, $_GET['messageId']);
-$message = Message::loadAllMessageByMesssageId($connect, $mess);
+//$message = Message::loadAllMessageByMesssageId($connect, $_GET['messageId']);
+//
 
 ?>
 
@@ -50,21 +48,21 @@ $message = Message::loadAllMessageByMesssageId($connect, $mess);
         </ul>
         Message:
         <?php
-            $messageSender = User::loadUserById($connect, $message->getIdSendera());  
-            echo "otrzymana od: " . $messageSender->getUsername() . '<br>';
-            echo "otrzymana dnia: " . $message->getCreationDate() . '<br>';
-            echo $message->getMessage() . '<br>';
-            
-            echo '<h3>Users lists:</h3>';
-        
-            $allUsers = User::loadAllUsers($connect);
-            
-            foreach ($allUsers as $user){
-                if ($user->getId() != $loggedUserId){
-                    echo $user->getUsername();
-                    echo '<a href="user_page.php?userId=' . $user->getId() . '">Send message</a<br>';
-                }
-            }
+//            $messageSender = User::loadUserById($connect, $message->getIdSendera());  
+//            echo "otrzymana od: " . $messageSender->getUsername() . '<br>';
+//            echo "otrzymana dnia: " . $message->getCreationDate() . '<br>';
+//            echo $message->getMessage() . '<br>';
+//            
+//            echo '<h3>Users lists:</h3>';
+//        
+//            $allUsers = User::loadAllUsers($connect);
+//            
+//            foreach ($allUsers as $user){
+//                if ($user->getId() != $loggedUserId){
+//                    echo $user->getUsername();
+//                    echo '<a href="user_page.php?userId=' . $user->getId() . '">Send message</a<br>';
+//                }
+//            }
         ?>
     </body>
 </html>
