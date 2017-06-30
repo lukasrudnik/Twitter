@@ -34,10 +34,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
 
 // Sprawdzenie formularza wiadomiośći
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) && 
-    strlen(trim($_POST['message'])) > 0){
-    
+    strlen(trim($_POST['newMessage'])) > 0){
+       
     $message = new Message();
-    $message->setMessage($_POST['message']);
+    $message->setText($_POST['newMessage']);
     $message->setIdSendera($userSession);
     $message->setIdRecivera($_POST['receiver']);
     $message->setCreationDate(date('Y-m-d H:i:s'));
@@ -83,13 +83,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
         </ul>
         <h3><br>Your tweets:</h3>
     </body>
-</html>
-      
+</html>    
 <?php
-            
-        if(isset($_SESSION['userId']) == $userSession){
-            
-            // Wyświetlanie ilości tweetów użytkownika tej sesji
+
+            // Wyświetlanie tweetów użytkownika tej sesji
             $tweets = Tweet::loadTweetByUserId($connect, $userSession);
             
             if(count($tweets) > 0){       
@@ -147,7 +144,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                     echo (' Send message to this user
                     <form method="POST" >
                     <input type="hidden" name="messageForm" value="messageForm">
-                    <input type="text" name="message" placeholder="only 255 characters">
+                    <input type="text" name="newMessage" placeholder="only 255 characters">
                     <input type="hidden" name="receiver" value="' . $user->getId() . '">
                     <input type="submit" value="Send message">
                     </form > ') . "<br>";
@@ -155,15 +152,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
             }
 
         
-            // Wysyłane wiadomośći
+            // Otrzymane wiadomośći
             echo '<h3>Received messages:</h3>';
             $messages = Message::loadAllMessagesByIdRecivera($connect, $userSession);
             
             if(count($messages) > 0){
                 foreach($messages as $message){
-                    $messageAuthorId = $message->getIdSendera();
-                    $messageAuthor = User::loadUserbyId($connect, $messageAuthorId);  
+                    $messageAuthorId = $message->$id();
+                    $messageAuthor = User::loadUserbyId($connect, $messageAuthorId); 
                     
+                    $user = User::loadUserById($connect, $userSession);
+
                     echo 'Message received from: ' . $messageAuthor->getUsername();
                     
                     if($message->getMessageRead() == 0){
@@ -179,23 +178,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                 echo "You don't have any messages yet";
             }
 
-           // Otrzymane wiadomośći 
-            echo '<h3>Sended messages:</h3>';      
-            $messages = Message::loadAllMessagesByUserId($connect, $userSession);
-            
+
+            // Wysłane wiadomośći 
+            echo '<h3>Sended messages:</h3>';    
+            $messages = Message::loadSentAllMessagesByUserId($connect, $userSession);
+
             if(count($messages) > 0){
-                foreach ($messages as $message){
-                    
+                foreach($messages as $message){                 
                     $messageReceiverId = $message->getIdRecivera();
-                    $messageReceiver = User::loadUserbyId($connect, $messageReceiverId);
+                    $messageReceiver = User::loadUserById($connect, $messageReceiverId); 
+                    
                     echo 'Message sent to: ' . $messageReceiver->gerId();
                     echo 'Received on: ' . $message->getCreationDate();
                     echo $message->getMessage() . '<br>';
                 }
             }
             else{
-                echo 'You have not received any messages yet';
-            }            
-        }
+                echo 'You have not send any messages yet';
+            }    
 
 ?>

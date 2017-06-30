@@ -75,7 +75,7 @@ $sql = "CREATE TABLE Message (
         id INT NOT NULL AUTO_INCREMENT,
         idSendera INT NOT NULL,
         idRecivera INT NOT NULL,
-        message VARCHAR(255) NOT NULL,
+        text VARCHAR(255) NOT NULL,
         messageRead INT NOT NULL,
         creationDate DATE NOT NULL,
         PRIMARY KEY(id),

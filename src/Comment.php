@@ -36,7 +36,7 @@
          return $this->idPostu;
      }
      
-    public function setText($text){
+     public function setText($text){
         if(is_string($text) && strlen(trim($text)) > 0){
             $this->text = $text;
         }

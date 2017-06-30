@@ -5,7 +5,7 @@ class Message{
     private $id;
     private $idSendera;
     private $idRecivera;
-    private $message;
+    private $text;
     private $messageRead;
     private $creationDate;  
     
@@ -13,7 +13,7 @@ class Message{
         $this->id = -1;
         $this->idSendera = '';
         $this->idRecivera = '';
-        $this->message = '';
+        $this->text = '';
         $this->messageRead = 0; // domyślnie 0 bo wiadomość nie jest przeczytana 
         $this->creationDate = '';
     }
@@ -26,24 +26,26 @@ class Message{
         return $this->idSendera = $idSendera;
     }
     
-    function getIdSendera(){
+    public function getIdSendera(){
         return $this->idSendera;
     }
     
-    function setIdRecivera($idRecivera){
+    public function setIdRecivera($idRecivera){
         return $this->idRecivera = $idRecivera;
     }
     
-    function getIdRecivera(){
+    public function getIdRecivera(){
         return $this->idRecivera;
     }
     
-    function setMessage($message){
-        return $this->message = $message;
-    }
-    
-    function getMessage(){
-        return $this->message;
+    public function setText($text){
+        if(is_string($text) && strlen(trim($text)) > 0){
+            $this->text = $text;
+        }
+     }
+     
+    public function getText(){
+         return $this->text;
     }
     
     public function setMessageRead($messageRead){
@@ -67,8 +69,8 @@ class Message{
     public function saveToDB(mysqli $connection){      
         if($this->id == -1){
             
-            $sql = "INSERT INTO Message (idSendera, idRecivera, message, messageRead, creationDate)
-                    VALUES('{$this->idSendera}', '{$this->idRecivera}', '{$this->message}',
+            $sql = "INSERT INTO Message (idSendera, idRecivera, text, messageRead, creationDate)
+                    VALUES('{$this->idSendera}', '{$this->idRecivera}', '{$this->text}',
                     '{$this->messageRead}', '{$this->creationDate}')";
             
             $result = $connection->query($sql);
@@ -81,39 +83,40 @@ class Message{
                 return false;
             }
         }    
-        else{
-            $sql = "UPDATE Message
-                    SET idSendera = '{$this->idSendera}',
-                        idRecivera = '{$this->idRecivera}',
-                        message = '{$this->message}',
-                        messageRead = '{$this->messageRead}',
-                        creationDate = '{$this->creationDate}'
-                    WHERE id = '{$this->id}'";
-            
-            if($connection->query($sql)){
-                return true;
-            }
-            else{       
-                return false;
-            }
-        }
+//        else{
+//            $sql = "UPDATE Message
+//                    SET idSendera = '{$this->idSendera}',
+//                        idRecivera = '{$this->idRecivera}',
+//                        text = '{$this->text}',
+//                        messageRead = '{$this->messageRead}',
+//                        creationDate = '{$this->creationDate}'
+//                    WHERE id = '{$this->id}'";
+//            
+//            if($connection->query($sql)){
+//                return true;
+//            }
+//            else{       
+//                return false;
+//            }
+//        }
     }
     
     
-    static public function loadAllMessagesByUserId(mysqli $connection, $userId){
-        $sql = "SELECT * FROM Message WHERE idSendera =" . "ORDER BY creationDate DESC";
-        
+    static public function loadSentAllMessagesByUserId(mysqli $connection, $idSendera){
+        $sql = "SELECT * FROM Message WHERE idSendera = $idSendera" . "ORDER BY creationDate DESC";
+             
         $messages = [];
         
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
             foreach($result as $row){
+//                $row = $result->fetch_assoc();
                 
                 $message = new Message();
                 $message->id = $row['id'];
                 $message->idSendera = $row['idSendera'];
                 $message->idRecivera = $row['idRecivera']; 
-                $message->message = $row['message'];
+                $message->text = $row['text'];
                 $message->$messageRead = $row['messageRead'];
                 $message->$creationDate = $row['creationDate'];
                 
@@ -128,13 +131,13 @@ class Message{
     
     /* Aktualizacja nieprzeczytanych wiadomośći: W tabeli stwórz pole trzymające informację, 
     czy wiadomość została przeczytana np.: 1–wiadomośćprzeczytana, lub, 0–wiadomośćnieprzeczytana) */
-    static public function updateMessageRead(mysqli $connection, $messageId){
-        $sql = "SELECT * FROM Message WHERE id = ";
+    static public function updateMessageRead(mysqli $connection, $messageRead){
+        $sql = "SELECT * FROM Message WHERE messageRead = $messageRead";
         
         $result = $connection->query($sql);
         if($result){
-            $updateQuery = "UPDATE Message SET messageRead = '1' WHERE id = '$messageId'";
-            // '1' - bo wiadomosc nie jest przeczytana
+            $updateQuery = "UPDATE Message SET messageRead = '1' WHERE id = '$messageRead'";
+            // '1' - bo wiadomosc jest przeczytana po aktualizacji
        
             if($result = $connection->query($updateQuery)){             
                 return true;
@@ -147,20 +150,21 @@ class Message{
     }
     
     
-    static public function loadAllMessagesByIdRecivera(mysqli $connection, $userId){
-        $sql = "SELECT * FROM Message WHERE idRecivera = " . "ORDER BY creationDate DESC";
+    static public function loadAllMessagesByIdRecivera(mysqli $connection, $idRecivera){
+        $sql = "SELECT * FROM Message WHERE idRecivera = $idRecivera" . "ORDER BY creationDate DESC";
         
         $messages = [];
         
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
             foreach($result as $row){
+                $row = $result->fetch_assoc();
                            
                 $message = new Message();
                 $message->id = $row['id'];
                 $message->idSendera = $row['idSendera'];
                 $message->idRecivera = $row['idRecivera']; 
-                $message->message = $row['message'];
+                $message->text = $row['text'];
                 $message->$messageRead = $row['messageRead'];
                 $message->$creationDate = $row['creationDate'];
                 
@@ -174,8 +178,8 @@ class Message{
     }
     
     
-    static public function loadAllMessageByMesssageId(mysqli $connection, $messageId){
-        $sql = "SELECT * FROM Message WHERE id = '$messageId'";
+    static public function loadAllMessageByMesssageId(mysqli $connection, $id){
+        $sql = "SELECT * FROM Message WHERE id = $id";
         
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows == 1){
@@ -186,7 +190,7 @@ class Message{
                 $message->id = $row['id'];
                 $message->idSendera = $row['idSendera'];
                 $message->idRecivera = $row['idRecivera']; 
-                $message->message = $row['message'];
+                $message->text = $row['text'];
                 $message->$messageRead = $row['messageRead'];
                 $message->$creationDate = $row['creationDate'];
                 
