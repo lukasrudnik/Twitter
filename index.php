@@ -53,7 +53,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
         echo 'There was a problem adding the comment!';
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -92,10 +91,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             <input type="hidden" name="newTweetForm" value="newTweetForm">
             <input role="button" class="btn btn-default" type="submit"  value="Add new Tweet">
         </form>          
-        <h3><br>Users lists:</h3>
+        <h3><br>Users lists:</h3>    
         
-        <?php
-        
+        <?php     
         // Dodawanie wszystich pozostałych użytkowników z bazy danych
         // Połączenie z loadAllUsers w klasie User
         $allUsers = User::loadAllUsers($connect);
@@ -110,16 +108,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
         }
         
         
-        echo ('<h3><br>Tweets lists:</h3>');
-          
         // Wyświetlanie Tweetów - połączenie z loadAllTweets w klasie Tweet
+        echo ('<h3><br>Tweets lists:</h3>');
+        
         $tweets = Tweet::loadAllTweets($connect);      
-        foreach($tweets as $tweet){      
+        foreach($tweets as $tweet){            
             // Pobieranie ID autora tweeta tweeta z klasy Tweet
-            $authorTweetId = $tweet->getUserId();
+            $authorTweetId = $tweet->getUserId();  
             // Autor tweeta pobrany z klasy User z loadUserbyId oraz z getUserId z klasy Tweet
             // User id jest kluczem nadrzędnym id z klasy Tweet
-            $authorTweet = User::loadUserbyId($connect, $authorTweetId);     
+            $authorTweet = User::loadUserbyId($connect, $authorTweetId);    
+            
             echo $authorTweet->getUsername() . ' added tweet <br> at time: ' . ' ';
             echo $tweet->getCreationDate() . '<br>';
             echo 'Content: ' . $tweet->getText() . '<br><br> Comments below: <br>';
@@ -133,12 +132,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
                 // Autor komentarza pobrany z klasy User z loadUserbyId oraz z getIdUsera z klasy Comment
                 // User id jest kluczem nadrzędnym id z klasy Comment
                 $authorComment = User::loadUserbyId($connect, $authorCommentId);
+                
                 echo '<br>' . $authorComment->getUsername() . ' added comment <br> at time: ' . ' ';
                 echo $comment->getCreationDate() . '<br>';
                 echo 'Content: ' . $comment->getText() . '<br>';
             }
             
-            
+    
             // Dodatanie komentarza do tweeta
             echo ('
             <form method="POST">
@@ -147,8 +147,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             <input type="hidden" name="tweetId" value="' . $tweet->getId() . '"> 
             <input role="button" type="submit" value="Add new Comment">
             </form>') . "<br><hr>";
-        }
-        
+        }   
         ?>
     </body>
 </html>
