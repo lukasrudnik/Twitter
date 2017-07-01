@@ -75,6 +75,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 ?>
             </li>
         </ul>
+        <hr>
         <form method="POST">
             <label>
                 Your Name:

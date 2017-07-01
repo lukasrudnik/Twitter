@@ -84,7 +84,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
                 ?>
                 <!-- Wylogowanie zalogowanego użytkownika -->
             </li>
-        </ul>        
+        </ul>    
+        <hr>    
         <h3><br>Add new Tweet:</h3>
         <form action="#" method="POST">
             <input type="text" name="newTweet" placeholder="only 140 characters">

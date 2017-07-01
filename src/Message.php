@@ -83,25 +83,12 @@ class Message{
                 return false;
             }
         }    
-//        else{
-//            $sql = "UPDATE Message
-//                    SET idSendera = '{$this->idSendera}',
-//                        idRecivera = '{$this->idRecivera}',
-//                        text = '{$this->text}',
-//                        messageRead = '{$this->messageRead}',
-//                        creationDate = '{$this->creationDate}'
-//                    WHERE id = '{$this->id}'";
-//            
-//            if($connection->query($sql)){
-//                return true;
-//            }
-//            else{       
-//                return false;
-//            }
-//        }
     }
     
+    /* Atrybuty i metody statyczne nie wymagają tego, aby istniał jakiś obiekt danej klasy, gdyż należą one do klasy, a nie do konkretnego obiektu !!! */
     
+    /* ($connection, $userId) bo muszę mieć ID osoby wysyłającej wiadomość - (nadawca wiadomości)
+    jest to sesja zalogowanego użytkownika */
     static public function loadAllMassagesBySenderId(mysqli $connection, $userId){
         $sql = "SELECT * FROM Message WHERE idSendera = '" . $connection->real_escape_string($userId) 
                 . "'ORDER BY creationDate DESC";
@@ -111,21 +98,21 @@ class Message{
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
             foreach($result as $row){
-//                while($row = $result->fetch_assoc());
                 
                 $message = new Message();
                 $message->id = $row['id'];
                 $message->idSendera = $row['idSendera'];
                 $message->idRecivera = $row['idRecivera']; 
                 $message->text = $row['text'];
-//                $message->$messageRead = $row['messageRead'];
-//                $message->$creationDate = $row['creationDate'];
+                $message->messageRead = $row['messageRead'];
+                $message->creationDate = $row['creationDate'];
                 
                 $messages[] = $message;           
             }
         }
             return $messages;
     }
+    
     
     /* Aktualizacja nieprzeczytanych wiadomośći: W tabeli stwórz pole trzymające informację, 
     czy wiadomość została przeczytana np.: 1–wiadomośćprzeczytana, lub, 0–wiadomośćnieprzeczytana) */
@@ -149,6 +136,8 @@ class Message{
     }
     
     
+    /* ($connection, $userId) bo muszę mieć ID odbiorcy wiadomości 
+    jest to sesja zalogowanego użytkownika */
     static public function loadAllMessagesByIdRecivera(mysqli $connection, $userId){
         $sql = "SELECT * FROM Message WHERE idRecivera = '" . $connection->real_escape_string($userId) 
                 . "'ORDER BY creationDate DESC";
@@ -158,15 +147,14 @@ class Message{
         $result = $connection->query($sql);    
         if($result == true && $result->num_rows > 0){
             foreach($result as $row){
-//                $row = $result->fetch_assoc();
                            
                 $message = new Message();
                 $message->id = $row['id'];
                 $message->idSendera = $row['idSendera'];
                 $message->idRecivera = $row['idRecivera']; 
                 $message->text = $row['text'];
-//                $message->$messageRead = $row['messageRead'];
-//                $message->$creationDate = $row['creationDate'];
+                $message->messageRead = $row['messageRead'];
+                $message->creationDate = $row['creationDate'];
                 
                 $messages[] = $message;
             }
@@ -191,8 +179,8 @@ class Message{
                 $message->idSendera = $row['idSendera'];
                 $message->idRecivera = $row['idRecivera']; 
                 $message->text = $row['text'];
-//                $message->$messageRead = $row['messageRead'];
-//               $message->$creationDate = $row['creationDate'];
+                $message->messageRead = $row['messageRead'];
+                $message->creationDate = $row['creationDate'];
                 
                 return $message;                     
             }     
@@ -216,8 +204,7 @@ class Message{
         }
         return true;   
     }
-    
-    
+     
     /*
     // FUNKCJA DODAJĄCA WIADOMOŚĆ 
     public function createMessage(mysqli $connection){
@@ -248,9 +235,7 @@ class Message{
         }
         return false;
     }   
-    */
-   
-    
+    */   
 }
 
 ?>

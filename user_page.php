@@ -78,9 +78,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
                 if(isset($_SESSION['userId'])){
                     echo "<a href='logout.php'>Logout</a>";
                 }
-                ?>
+                ?>    
             </li>
         </ul>
+        <hr>
         <h3><br>Your tweets:</h3>
     </body>
 </html>  
@@ -102,7 +103,7 @@ if(count($tweets) > 0){
         $quantityComents = count($comments);
         
         if($quantityComents > 0){
-            echo ' Number of comments: '. $quantityComents . '<br>';
+            echo 'Number of comments: '. $quantityComents . '<br>';
         }
         
         // Wyświetlanie treśći komentarzy do danego tweeta
@@ -143,7 +144,7 @@ foreach($allUsers as $user){
         // formularz do wysyłania wiadomości
         echo $user->getUsername() . " ----> ";  
         echo (' Send message to this user
-        <form method="POST" >
+        <form method="POST">
         <input type="hidden" name="messageForm" value="messageForm">
         <input type="text" name="newMessage" placeholder="only 255 characters">
         <input type="hidden" name="receiver" value="' . $user->getId() . '">
@@ -155,47 +156,75 @@ foreach($allUsers as $user){
 
 // Otrzymane wiadomośći
 echo '<h3>Received messages:</h3>';
-$messages = Message::loadAllMessagesByIdRecivera($connect, $userSession);
+$messages = Message::loadAllMessagesByIdRecivera($connect, $userSession); // wyświetlanie po ID odbiorcy
             
 if(count($messages) > 0){
     
-    foreach($messages as $message){     
-        $messageAuthorId = $message->getIdSendera();
-        $messageAuthor = User::loadUserbyId($connect, $messageAuthorId);                 
-                    
-        echo 'Message received from: ' . $messageAuthor->getUsername() . '<br>';
-                    
+    foreach($messages as $message){  
+        // Ustawienie ID nadawcy wiadomości
+        $authorMessageId = $message->getIdSendera();
+        // Przypisanie ID nadawcy wiadomości do ID Username
+        $authorMessage = User::loadUserbyId($connect, $authorMessageId);        
+        
+        // Wyświetla komuniakt jeśli jest nieprzeczytana wiadomość 
         if($message->getMessageRead() == 0){
-            echo 'Unread message - ';
+            echo '<u><b>Unread message!</b></u><br>';
         }
+        
+        // wyświetlanie Username nadawcy wiadomości po tym ID przypisanym wyżej            
+        echo 'Message received from: ' . $authorMessage->getUsername() . '<br>';        
         echo 'Received on: ' . $message->getCreationDate() . '<br>';
-        echo 'Content: ' . substr($message->getText(), 0, 10) . " -----> "; 
-        // wyświetla do (10) znaków wiadomości
-        echo '<a href="notice.php?messageId=' . $message->getId() . '">Read message now</a>' . 
-            '<br><br>';
+        // wyświetla do 10 znaków wiadomości w przypadku - substr($message->getText(), 0, 10)
+        echo 'Content: ' . substr($message->getText(), 0, 255) . '<br>'; 
+        echo ('<a href="notice.php?messageId=' . $message->getId() . 
+                '"><button type="submit" value="changeStatusMessage">
+                Change message to status readed</button></a>' . '<br><br>');    
+        
+        /*
+        // formularz do zmiany statusu wiadomości metodą POST
+        echo ('<form method="POST">
+        <input type="hidden" name="messageId" value="messageId">
+        <input type="submit" value="Change message to status readed">
+        </form > ') . "<br>";
+        */        
     }
 }
 else{
     echo "You don't have any messages yet";
 }
 
+/*
+// Zmiana statusu wiadomości na przeczytany
+$messageId = '';
+     
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageId'])){
+    
+    Message::updateMessageRead($connect, $_POST['messageId']);
+    $message = Message::loadAllMessageByMesssageId($connect, $_POST['messageId']);
+      
+    echo "Messages status changed";
+}
+*/
 
 // Wysłane wiadomośći 
 echo '<h3>Sended messages:</h3>';    
-$messages = Message::loadAllMassagesBySenderId($connect, $userSession);
+$messages = Message::loadAllMassagesBySenderId($connect, $userSession); // wyświetlanie po ID nadawcy
 
 if(count($messages) > 0){
     
     foreach($messages as $message){ 
-        $messageReceiverId = $message->getIdRecivera();
-        $messageReceiver = User::loadUserById($connect, $messageReceiverId); 
-                    
-        echo 'Message sent to: ' . $messageReceiver->getUsername() . "<br>";
-        echo 'Received on: ' . $message->getCreationDate();
-        echo $message->getText() . '<br><br>';
+        // Ustawienie ID osoby odbierającej wiadomość
+        $reciverMessageId = $message->getIdRecivera();
+        // Przypisanie ID odbiorcy wiadomości do ID Username
+        $reciverMessage = User::loadUserById($connect, $reciverMessageId); 
+        // Wyświetlanie Username odbiorcy po tym ID przypisanym wyżej            
+        echo 'Message sent to: ' . $reciverMessage->getUsername() . "<br>";  
+        echo 'Sended on: ' . $message->getCreationDate() . '<br>';
+        echo 'Content: ' . $message->getText() . '<br><br>';
     }
 }
 else{
     echo 'You have not send any messages yet';
 }
+
 ?>
