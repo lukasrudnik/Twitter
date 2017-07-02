@@ -104,7 +104,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             if($user->getId() != $userSession){
                 echo $user->getUsername() . " ----> ";
                 // możliwość wysłania do nich wiadomości GETem i przesłanie nim messageId
-                echo '<a href="user_page.php?userId=' . $user->getId() . '">Send message</a><br>';       
+                echo ('<a href="user_page.php?userId=' . $user->getId() .
+                        '"><button type="submit" value="changeStatusMessage">
+                        Send message</button></a>' . '<br><br>');
+                
             }
         }
         
