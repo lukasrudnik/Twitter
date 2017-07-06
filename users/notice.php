@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once 'initial.php';
+require_once '../src/initial.php';
 
 if(!isset($_SESSION['userId'])){
     header('Location:login.php');

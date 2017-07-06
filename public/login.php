@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once 'initial.php';
+require_once '../src/initial.php';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST' && 
             isset($_POST['email']) && (strlen(trim($_POST['email'])) >= 6) && 
@@ -38,7 +38,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' &&
                       
             if($checkPassword){
                 $_SESSION['userId'] = $row['id'];
-                header('Location: index.php'); 
+                header('Location: ../index.php'); 
                 // ustawienie sesji i przekierowanie na stronę główną
             }
             else{
@@ -61,25 +61,32 @@ if ($LoggedUser instanceof User){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <title>Login Page</title>
+       <link rel="stylesheet" type="text/css" href="css/style.css">
+       <link rel="stylesheet"href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+       crossorigin="anonymous">
 </head>
+<style>
+</style>
 <body>
     <form method="POST">
-        <label>
-            E-mail:
-            <br>
-            <input type="email" name="email">
-        </label>
-        <br>
-        <label>
-            Password:
-            <br>
-            <input type="password" name="password">
-        </label>
-        <br>
-        <input class="btn btn-default" type="submit" value="Login In">
+        <div class="container">
+            <div class="form-group">
+               <label for="E-mail">E-mail:</label>
+               <input type="email" class="form-control" name="email">
+               <br>
+               <label for="Password">Password:</label>
+               <br>
+               <input type="password" class="form-control" name="password">    
+               <br>
+               <input class="btn btn-primary" type="submit" value="Login In">
+               <br>
+               <br>
+               <a class="btn btn-default" href="register.php" role="button">
+                    Click to move to Register Page</a>
+            </div>
+       </div>
     </form>
-    <a class="btn btn-primary" href="register.php" role="button">Click to move to Register Page</a>
 </body>
 </html>

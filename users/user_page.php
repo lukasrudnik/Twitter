@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-require_once 'initial.php';
+require_once '../src/initial.php';
 
 if(!isset($_SESSION['userId'])){
-    header('Location: login.php');
+    header('Location: ../public/login.php');
 }
 
 // Aktywna sesja użytkownika
@@ -63,7 +63,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['messageForm']) &&
         ?>
         <ul>
             <li>
-                <a href="index.php">Main page</a>
+                <a href="../index.php">Main page</a>
             </li>
             <li>
                 <?php
@@ -146,7 +146,7 @@ foreach($allUsers as $user){
         echo (' Send message to this user
         <form method="POST">
         <input type="hidden" name="messageForm" value="messageForm">
-        <input type="text" name="newMessage" placeholder="only 255 characters">
+        <input type="text" name="newMessage" placeholder="only 255 characters"> 
         <input type="hidden" name="receiver" value="' . $user->getId() . '">
         <input type="submit" value="Send message">
         </form > ') . "<br>";

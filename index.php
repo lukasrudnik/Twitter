@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once 'initial.php';
+require_once 'src/initial.php';
 
 /*
 include_once __DIR__ . '/src/user.php';
@@ -9,7 +9,7 @@ include_once __DIR__ . '/src/user.php';
 */
 
 if(!isset($_SESSION['userId'])){
-    header('Location: login.php');
+    header('Location: public/login.php');
 }
 
 // Dodanie sesji użytkownika i połączenie z loadUserById w klasie User
@@ -59,7 +59,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Main Page</title>
+            <title>Main Page</title>
+            <link rel="stylesheet" type="text/css" href="css/style.css">
+            <link rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
     <body>
         Welcome:
@@ -69,7 +73,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
         <!-- powitanie zalogowanego użytkownika -->
         <ul>
             <li>
-                <a href="user_page.php"> 
+                <a href="users/user_page.php"> 
                 <?php
                     echo $loggedUser->getUsername() 
                 ?>
@@ -79,7 +83,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             <li>
                 <?php 
                     if(isset($_SESSION['userId'])){
-                        echo "<a href='logout.php'>Logout</a>";
+                        echo "<a href='users/logout.php'>Logout</a>";
                     } 
                 ?>
                 <!-- Wylogowanie zalogowanego użytkownika -->
@@ -104,7 +108,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newCommentForm']) &&
             if($user->getId() != $userSession){
                 echo $user->getUsername() . " ----> ";
                 // możliwość wysłania do nich wiadomości GETem i przesłanie nim messageId
-                echo ('<a href="user_page.php?userId=' . $user->getId() .
+                echo ('<a href="users/user_page.php?userId=' . $user->getId() .
                         '"><button type="submit" value="changeStatusMessage">
                         Send message</button></a>' . '<br><br>');
                 

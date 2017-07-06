@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-require_once 'initial.php';
+require_once '../src/initial.php';
 
 if(!isset($_SESSION['userId'])){
-    header('Location:login.php');
+    header('Location: ../public/login.php');
 }
 
 // Pobranie ID zalogowanego użytkownika z klasy User poprzez User::loadUserById (funkcja statyczna)
@@ -58,7 +58,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         ?>
         <ul>
             <li>
-                <a href="index.php">Main page</a>
+                <a href="../index.php">Main page</a>
             </li>
             <li>
                 <a href="user_page.php"> 

@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-require_once 'initial.php';
+require_once '../src/initial.php';
 
 if(!isset($_SESSION['userId'])){
-    header('Location:login.php');
+    header('Location: ../public/login.php');
 }
 
 $userSession = $_SESSION['userId'];
@@ -18,13 +18,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deleteUser'])){
         // pole wyboru usunięcia użytkownika 
         switch ($deleteUser){
             case 'no':
-                header("Location: user_page.php");
+                header("Location: ../users/user_page.php");
                 break;
             case 'yes':
-                echo 'Bye ' . $loggedUser->getUsername() . '!'; 
                 // Usunięcie użytkownika z bazy danych
                 if ($loggedUser->delete($connect)){
-                    header("Location: register.php");
+                    header("Location: ../public/register.php");
                 }
                 else{
                     echo 'Something went wrong, please try again! <br>';
@@ -40,6 +39,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deleteUser'])){
     <head>
         <meta charset="UTF-8">
         <title> Delete Page</title>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body> 
         <form action="" method="post" role="form">

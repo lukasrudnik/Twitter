@@ -1,6 +1,6 @@
 <?php
 
-require_once 'initial.php';
+require_once '../src/initial.php';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){  
     if(isset($_POST['username']) && strlen(trim($_POST['username'])) >= 3 
@@ -41,33 +41,36 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <head>
        <meta charset="UTF-8">
        <title>Register Page</title>
+           <link rel="stylesheet" type="text/css" href="css/style.css">
+           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
     <body>
         <form method ='POST'>
-            <label>
-                User name: 
-                <br>
-                <input type='text' name='username'>
-            </label>
-            <br>
-            <label>
-                E-mail:<br>
-                <input type="email" name="email">
-            </label>
-            <br>
-            <label>
-                Password: <br>
-                <input type="password" name='password'>
-            </label>
-            <br>
-            <label>
-                Repeat password: 
-                <br>
-                <input type='password' name="repeadPassword">          
-            </label>
-            <br>
-            <input type="submit" value="Register new User!">
-        </form>
-        <a href="login.php">Click to move to Login Page</a>
+           <div class="container">
+               <div class="form-group">
+                    <label for="Username">Username:</label>
+                    <input type="text" class="form-control" name="username">
+                    <br>
+                    <label for="E-mail">E-mail:</label>
+                    <input type="email" class="form-control" name="email">
+                    <br>
+                    <label for="Password">Password:</label>
+                    <input type="password" class="form-control" name="password">
+                    <br>
+                    <label for="Repeat_password">Repeat password:</label>
+                    <input type="password" class="form-control" name="repeadPassword">
+                    <br>
+                </div>
+                <div class="form-group">
+                    <br>
+                    <input class="btn btn-danger" type="submit" value="Register new User!">
+                    <br>
+                    <br>
+                    <a class="btn btn-default" href="login.php">
+                        Click to move to Login Page</a>
+                </div>
+            </div>
+        </form>    
     </body>
 </html>
