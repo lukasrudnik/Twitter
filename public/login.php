@@ -57,21 +57,25 @@ if ($LoggedUser instanceof User){
 */
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
-       <link rel="stylesheet" type="text/css" href="css/style.css">
-       <link rel="stylesheet"href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+       <link rel="stylesheet" href="css/style.css">
+       <link rel="stylesheet"
+       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+       integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
        crossorigin="anonymous">
 </head>
-<style>
-</style>
 <body>
+    <style> 
+    </style>
     <form method="POST">
         <div class="container">
+            <div class="jumbotron">
+                <h2>Login to continue...</h2>
+            </div>
             <div class="form-group">
                <label for="E-mail">E-mail:</label>
                <input type="email" class="form-control" name="email">
@@ -80,10 +84,9 @@ if ($LoggedUser instanceof User){
                <br>
                <input type="password" class="form-control" name="password">    
                <br>
+               <br>
                <input class="btn btn-primary" type="submit" value="Login In">
-               <br>
-               <br>
-               <a class="btn btn-default" href="register.php" role="button">
+               <a class="btn btn-info" href="register.php" role="button">
                     Click to move to Register Page</a>
             </div>
        </div>

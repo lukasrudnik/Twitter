@@ -42,76 +42,100 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         echo 'Invalid data provided! <br>';
     }
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Settings Page</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
     <body> 
-        Welcome:
-        <?php 
-            echo $loggedUser->getUsername() . "!"; 
-        ?>
-        <ul>
-            <li>
-                <a href="../index.php">Main page</a>
-            </li>
-            <li>
-                <a href="user_page.php"> 
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header navbar-left">
+                <a class="navbar-brand">Hello
                 <?php
-                    echo $loggedUser->getUsername() 
-                ?>
-                page </a>    
-            </li>
-            <li>
-                <?php
-                    if(isset($_SESSION['userId'])){
-                        echo "<a href='logout.php'>Logout</a>";
-                    }
-                ?>
-            </li>
-        </ul>
-        <hr>
+                    echo $loggedUser->getUsername() . " !"; 
+                ?> <!-- powitanie zalogowanego użytkownika -->
+                </a> 
+                <ul>
+                    <a href="../index.php">
+                    <?php
+                        echo "Main page" 
+                    ?> <!-- przekierowanie na stronę główną --> 
+                    </a> 
+                    <br>
+                    <a href="user_page.php">
+                    <?php
+                        echo $loggedUser->getUsername() 
+                    ?> <!-- przekierowanie na stronę --> 
+                        page
+                    </a>                    
+                    <br>
+                    <?php 
+                        if(isset($_SESSION['userId'])){
+                            echo "<a href='logout.php'>Logout</a>";
+                        } 
+                    ?> <!-- Wylogowanie zalogowanego użytkownika -->   
+                </ul> 
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+    <div class="jumbotron"> 
         <form method="POST">
             <label>
-                Your Name:
+                <h4>Your Name:</h4>
                 <?php
-                    echo $loggedUser->getUsername();
+                    echo '<b>' . $loggedUser->getUsername() . '</b>';
                 ?>
                 <br>
-                <input type="text" name="username" placeholder="change name here">
+                <input type="text" class="form-control" name="username" placeholder="change name here">
             </label>
             <br>
             <label>
-                Your E-mail:
+                <br><h4>Your E-mail:</h4>
                 <?php
                     echo $loggedUser->getEmail();
                 ?>
                 <br>
-                <input type="email" name="email" placeholder="change e-mail here">
+                <input type="email" class="form-control" name="email" placeholder="change e-mail here">
             </label>
             <br>
             <label>
-                Give a new password: 
-                <br>
-                <input type="password" name='password' placeholder="change password here">
+                <br><h4>Give a new password:</h4> 
+                <input type="password" class="form-control" name='password' 
+                       placeholder="change password here">
             </label>
             <br>
             <label>
-                Repeat password:
+                <br><h4>Repeat password:</h4>
+                <input type='password' class="form-control" name="repeadPassword" 
+                       placeholder="repeat password here">
                 <br>
-                <input type='password' name="repeadPassword" placeholder="repeat password here">
                 <br>
-                <input role="button" type="submit" value="Change the values">
+                <input role="button" class="btn btn-warning" type="submit" value="Change the values">
             </label>
         </form> 
         <br>
+        <br>
         <form action="delete.php" method="post">
-            <button type="submit" value="deleteUser">Delete User</button>
-        </form>    
+            <button type="submit" class="btn btn-danger" value="deleteUser">Delete User</button>
+        </form> 
+        </div>
+     </div>   
     </body>
+    <footer class="footer">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header navbar-left">
+                    <a class="navbar-brand">...</a>
+                </div>
+            </div>
+        </nav>  
+    </footer>
 </html>

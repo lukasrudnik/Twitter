@@ -1,5 +1,4 @@
 <?php
-
 require_once '../src/initial.php';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){  
@@ -33,9 +32,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }   
     }
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -45,9 +42,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
-    <body>
+    <body> 
+        <style> 
+        </style>
         <form method ='POST'>
            <div class="container">
+            <div class="jumbotron">
+                <h2>Please register first ;)</h2>
+            </div>
                <div class="form-group">
                     <label for="Username">Username:</label>
                     <input type="text" class="form-control" name="username">
@@ -64,10 +66,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 </div>
                 <div class="form-group">
                     <br>
-                    <input class="btn btn-danger" type="submit" value="Register new User!">
-                    <br>
-                    <br>
-                    <a class="btn btn-default" href="login.php">
+                    <input class="btn btn-success" type="submit" value="Register new User!">
+                    <a class="btn btn-info" href="login.php">
                         Click to move to Login Page</a>
                 </div>
             </div>
